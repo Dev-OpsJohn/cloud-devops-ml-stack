@@ -1,0 +1,10 @@
+groups:
+- name: example
+  rules:
+  - alert: HighCPUUsage
+    expr: node_cpu_seconds_total > 100
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: Server CPU usage is high!

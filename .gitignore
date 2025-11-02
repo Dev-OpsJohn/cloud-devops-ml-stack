@@ -1,0 +1,29 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment files
+.env
+
+# Jupyter Notebook checkpoints
+*.ipynb_checkpoints
+
+# VSCode and JetBrains IDEs
+.vscode/
+.idea/
+
+# macOS and Windows system files
+.DS_Store
+Thumbs.db
+
+# SSH and secret keys (for safety—never put private keys into git)
+*.pem
+*.key
+*.pub
+
+# Docker artifacts (optional)
+docker-compose.override.yml
+
+# Logs (if created)
+*.log
+logs/

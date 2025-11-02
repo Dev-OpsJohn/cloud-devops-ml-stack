@@ -1,0 +1,66 @@
+---
+- name: Ensure /etc/prometheus directory exists
+  file:
+    path: /etc/prometheus
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Ensure /var/lib/grafana/dashboards directory exists
+  file:
+    path: /var/lib/grafana/dashboards
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Run NGINX container
+  docker_container:
+    name: nginx
+    image: nginx:latest
+    state: started
+    restart_policy: always
+    published_ports:
+      - "80:80"
+
+- name: Run Node Exporter container
+  docker_container:
+    name: node-exporter
+    image: prom/node-exporter:latest
+    state: started
+    restart_policy: always
+    published_ports:
+      - "9100:9100"
+
+- name: Copy Prometheus config
+  copy:
+    src: "{{ playbook_dir }}/../../monitoring/prometheus/prometheus.yml"
+    dest: /etc/prometheus/prometheus.yml
+  become: yes
+
+- name: Copy Grafana sample dashboard
+  copy:
+    src: "{{ playbook_dir }}/../../monitoring/grafana/dashboards/sample-dashboard.json"
+    dest: /var/lib/grafana/dashboards/sample-dashboard.json
+  become: yes
+
+- name: Run Prometheus container
+  docker_container:
+    name: prometheus
+    image: prom/prometheus:latest
+    state: started
+    restart_policy: always
+    published_ports:
+      - "9090:9090"
+    volumes:
+      - /etc/prometheus:/etc/prometheus
+
+- name: Run Grafana container
+  docker_container:
+    name: grafana
+    image: grafana/grafana:latest
+    state: started
+    restart_policy: always
+    published_ports:
+      - "3000:3000"
+    volumes:
+      - /var/lib/grafana:/var/lib/grafana

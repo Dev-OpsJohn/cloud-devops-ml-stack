@@ -1,0 +1,32 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  become: yes
+
+- name: Install basic dependencies
+  apt:
+    name:
+      - curl
+      - git
+      - vim
+    state: present
+  become: yes
+
+- name: Install UFW (firewall)
+  apt:
+    name: ufw
+    state: present
+  become: yes
+
+- name: Allow needed ports with UFW
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+  with_items: "{{ ufw_allow_ports }}"
+  become: yes
+
+- name: Enable UFW
+  ufw:
+    state: enabled
+  become: yes

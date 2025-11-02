@@ -1,0 +1,30 @@
+---
+- name: Install dependencies for NVIDIA driver
+  apt:
+    name:
+      - build-essential
+      - dkms
+      - linux-headers-{{ ansible_kernel }}
+      - wget
+    state: present
+  become: yes
+
+- name: Download NVIDIA driver installer
+  get_url:
+    url: "http://us.download.nvidia.com/XFree86/Linux-x86_64/535.104.05/NVIDIA-Linux-x86_64-535.104.05.run"
+    dest: "/tmp/NVIDIA-driver.run"
+    mode: '0755'
+  become: yes
+
+- name: Run NVIDIA driver installer (silent, no X, kernel modules only)
+  command: sh /tmp/NVIDIA-driver.run --silent --no-x-check --no-nouveau-check
+  args:
+    creates: /proc/driver/nvidia/version
+  become: yes
+
+- name: Ensure nvidia-smi works
+  command: nvidia-smi
+  register: smi_output
+  changed_when: false
+  failed_when: smi_output.rc != 0
+  become: yes

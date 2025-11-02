@@ -1,0 +1,10 @@
+docker_users:
+  - ansibleadmin
+ufw_allow_ports:
+  - 22
+  - 80
+  - 443
+  - 8888
+  - 3000
+  - 9090
+monitoring_enabled: true

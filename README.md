@@ -1,49 +1,78 @@
-# Automated Cloud DevOps & Data Science Platform
+# GPU Ansible Automation
 
-## Overview
-This project automates the setup of cloud servers for web services, monitoring, and data science/ML with Ansible and Docker. It deploys NGINX, Prometheus, Node Exporter, Grafana, and Jupyter Notebook—all securely configured and managed.
+This repository contains Ansible playbooks, roles, and supporting files for managing GPU infrastructure, automation, and monitoring.
 
-## Features
-- Automated server configuration and updates (Ansible)
-- Docker installation and application deployment
-- Secure admin user with SSH key-only access
-- Live web server (NGINX)
-- Monitoring stack: Node Exporter, Prometheus, Grafana
-- Data science/ML workspace: Jupyter Notebook
-- Sample ML notebook using scikit-learn, pandas, and matplotlib
+## Project Structure
 
-## Access
-- **NGINX:** http://your-droplet-ip
-- **Prometheus:** http://your-droplet-ip:9090
-- **Grafana:** http://your-droplet-ip:3000 (login: admin/admin)
-- **Jupyter Notebook:** http://your-droplet-ip:8888
-- **SSH admin:** `ssh -i ~/.ssh/id_ed25519 ansibleadmin@your-droplet-ip`
-## How To Use
-1. Clone this repo to your workstation.
-2. Update the `hosts` file for your server IPs.
-3. Run the setup:
+- `ansible/`       – Playbooks, roles, inventories for server automation
+- `monitoring/`    – Monitoring stack (Prometheus, Grafana, exporters)
+- `terraform/`     – Terraform infrastructure code
+- `docs/`          – Documentation (architecture, usage, changelog)
+- `scripts/`       – Support scripts
 
-ansible-playbook -i hosts setup.yml -u root --private-key=~/.ssh/id_ed25519
+## Requirements
 
-4. Upload and run data/ML notebooks in the Jupyter web UI.
+- Ansible 2.9+
+- Docker (for monitoring stack)
+- Terraform (for IaaS automation)
+- Compatible Linux OS
 
-## Demo ML Workflow
-See `iris_ml_demo.ipynb`: loads the Iris dataset, trains a RandomForest model, and plots feature importance—a real, cloud-hosted ML example.
+## Monitoring & Dashboards
 
-## Security
-- Non-root admin user with key-only SSH access
-- UFW firewall restricts traffic to only necessary ports
+Grafana dashboards for monitoring GPU nodes are stored in:
 
-## Monitoring
-- Node Exporter exports system stats
-- Prometheus collects system metrics
-- Grafana visualizes host performance in dashboards
+monitoring/grafana/dashboards/
 
-## Portfolio/Interview Ready
-This project demonstrates:
-- Modern configuration management (Ansible)
-- Production-ready security and service orchestration
-- End-to-end cloud capabilities for infrastructure, monitoring, and ML/data science
 
----
+The project includes:
+
+- `sample-dashboard.json` – Example and template dashboard.
+- `gpu-bare-metal-automation-dashboard.json` – GPU Bare Metal Automation Project dashboard for Grafana.
+
+### Importing Dashboards to Grafana
+
+1. Open Grafana and go to "Dashboards" → "Manage".
+2. Click "Import" in the top/right.
+3. Upload the dashboard JSON file from `monitoring/grafana/dashboards/` or paste its contents.
+4. Complete the import, assigning appropriate data sources as prompted.
+
+## Setup
+
+1. **Clone the Repo**
+
+git clone https://github.com/your-username/gpu-ansible.git
+cd gpu-ansible
+
+
+2. **Configure Inventory & Vars**
+- Edit inventory and variables in `ansible/` as required for your environment.
+
+3. **Run Ansible Playbooks**
+- Example:
+  ```
+  ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/base-setup.yml
+  ```
+
+4. **Deploy Monitoring Stack**
+- From `monitoring/`, use Docker Compose:
+  ```
+  cd monitoring
+  docker-compose up -d
+  ```
+
+## Documentation
+
+See the `docs/` folder for:
+
+- `architecture.md` – System architecture overview
+- `changelog.md`    – Release notes and changes
+- `usage.md`        – How to use playbooks, monitoring, Terraform modules
+
+## Contributing
+
+Contributions, issues, and feature requests are welcome. Please update docs if you add new dashboards, roles, or features.
+
+## License
+
+See `LICENSE` for details.
 

@@ -1,0 +1,10 @@
+---
+- name: Base Cloud Server Setup
+  hosts: all
+  become: true
+  roles:
+    - common
+    - docker
+    - monitoring
+    - nvidia-driver
+    - security

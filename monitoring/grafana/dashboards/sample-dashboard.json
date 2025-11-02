@@ -1,0 +1,16 @@
+{
+  "dashboard": {
+    "title": "Example Dashboard",
+    "panels": [
+      {
+        "type": "graph",
+        "title": "Node Exporter CPU",
+        "targets": [
+          {
+            "expr": "node_cpu_seconds_total"
+          }
+        ]
+      }
+    ]
+  }
+}
